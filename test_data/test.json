@@ -1,0 +1,111 @@
+{
+    "version": 3,
+    "terraform_version": "0.11.3",
+    "serial": 7,
+    "lineage": "493f46cf-d49e-4e5e-a6eb-9d21744a27a6",
+    "modules": [
+        {
+            "path": [
+                "root"
+            ],
+            "outputs": {},
+            "resources": {
+                "ansible_group.base": {
+                    "type": "ansible_group",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "base",
+                        "attributes": {
+                            "id": "base",
+                            "inventory_group_name": "base"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.ansible"
+                },
+                "ansible_group.web": {
+                    "type": "ansible_group",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "web",
+                        "attributes": {
+                            "children.#": "3",
+                            "children.0": "foo",
+                            "children.1": "bar",
+                            "children.2": "baz",
+                            "id": "web",
+                            "inventory_group_name": "web",
+                            "vars.%": "2",
+                            "vars.bar": "2",
+                            "vars.foo": "bar"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.ansible"
+                },
+                "ansible_host.base": {
+                    "type": "ansible_host",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "base.example.com",
+                        "attributes": {
+                            "id": "base.example.com",
+                            "inventory_hostname": "base.example.com"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.ansible"
+                },
+                "ansible_host.db": {
+                    "type": "ansible_host",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "db.example.com",
+                        "attributes": {
+                            "groups.#": "2",
+                            "groups.0": "example",
+                            "groups.1": "db",
+                            "id": "db.example.com",
+                            "inventory_hostname": "db.example.com",
+                            "vars.%": "2",
+                            "vars.bar": "ddd",
+                            "vars.fooo": "ccc"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.ansible"
+                },
+                "ansible_host.www": {
+                    "type": "ansible_host",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "www.example.com",
+                        "attributes": {
+                            "groups.#": "2",
+                            "groups.0": "example",
+                            "groups.1": "web",
+                            "id": "www.example.com",
+                            "inventory_hostname": "www.example.com",
+                            "vars.%": "2",
+                            "vars.bar": "bbb",
+                            "vars.fooo": "aaa"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.ansible"
+                }
+            },
+            "depends_on": []
+        }
+    ]
+}
