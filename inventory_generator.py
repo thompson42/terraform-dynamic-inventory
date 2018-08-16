@@ -321,47 +321,46 @@ class TerraformDynamicInventory():
     
 
     def main(self):
-        #try:
+        try:
             
-        #tf_command = [TERRAFORM_PATH, 'state', 'pull', '-input=false']
-        #proc = subprocess.Popen(tf_command, cwd=TERRAFORM_DIR, stdout=subprocess.PIPE
-        
-        #open the original tfstate file, exit if it does not exist
-        if os.path.isfile(self.tfstate_path):
-            with open(self.tfstate_path) as f:
-                self.tfstate = json.load(f)
-        else:
-            sys.stdout.write("No TFSTATE files found at tfstate_path:" + tfstate_path + " or at tfstate_latest_path:" + tfstate_latest_path)
-            sys.exit(1)        
-        
-        #find out if there are two TFSTATE files to compare, otherwise this is an initial run
-        is_cluster_initialisation_required = self.cluster_initialisation_required()
-        
-        if is_cluster_initialisation_required:
-                inventory = self.build_inventory(self.tfstate, self.init_inventory())
-        else:
-            #difference the 2x TFSTATES - difference can be None, add_node or add_datacenter
-            self.difference_type = self.get_difference_type()
+            #tf_command = [TERRAFORM_PATH, 'state', 'pull', '-input=false']
+            #proc = subprocess.Popen(tf_command, cwd=TERRAFORM_DIR, stdout=subprocess.PIPE
             
-            if self.difference_type is None:
-                sys.stdout.write("No difference exixts between the old and new TFSTATE files, no work to do.")
-                sys.exit(1)
+            #open the original tfstate file, exit if it does not exist
+            if os.path.isfile(self.tfstate_path):
+                with open(self.tfstate_path) as f:
+                    self.tfstate = json.load(f)
+            else:
+                sys.stdout.write("No TFSTATE files found at tfstate_path:" + tfstate_path + " or at tfstate_latest_path:" + tfstate_latest_path)
+                sys.exit(1)        
             
-            self.build_modified_inventory()
-            inventory = self.original_inventory
+            #find out if there are two TFSTATE files to compare, otherwise this is an initial run
+            is_cluster_initialisation_required = self.cluster_initialisation_required()
             
-        sys.stdout.write(json.dumps(inventory, indent=2))
+            if is_cluster_initialisation_required:
+                    inventory = self.build_inventory(self.tfstate, self.init_inventory())
+            else:
+                #difference the 2x TFSTATES - difference can be None, add_node or add_datacenter
+                self.difference_type = self.get_difference_type()
+                
+                if self.difference_type is None:
+                    sys.stdout.write("No difference exixts between the old and new TFSTATE files, no work to do.")
+                    sys.exit(1)
+                
+                self.build_modified_inventory()
+                inventory = self.original_inventory
+                
+            sys.stdout.write(json.dumps(inventory, indent=2))
             
-        #except:
-        #   sys.stdout.write("An exception occured generating the dynamic inventory, plese check your TFSTATE file/s.")
-        #   sys.exit(1)
+        except:
+            sys.stdout.write("An exception occured generating the dynamic inventory, plese check your TFSTATE file/s.")
+            sys.exit(1)
             
-        return json.dumps(inventory, indent=2)
+        #return json.dumps(inventory, indent=2)
 
 if __name__ == '__main__':
     
     tfstate_path = 'test_data/tf_state.json'
     tfstate_latest_path = 'test_data/tf_state_add_datacenter.json'  
-    
     tdi = TerraformDynamicInventory(tfstate_path, tfstate_latest_path)
     tdi.main()
