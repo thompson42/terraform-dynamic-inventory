@@ -11,25 +11,27 @@ class TerraformDynamicInventory():
     
     def __init__(self, tfstate_path, tfstate_latest_path):
         
-        self.tfstate_path         = tfstate_path
-        self.tfstate_latest_path  = tfstate_latest_path
-        self.tfstate              = None
-        self.tfstate_latest       = None  
-        self.difference_type      = None
-        self.original_inventory   = None
-        self.latest_inventory     = None
-        self.latest_dc_count = None   
-        self.original_dc_count    = None
-        self.original_node_count  = None
-        self.latest_node_count    = None         
+        self.tfstate_path        = tfstate_path
+        self.tfstate_latest_path = tfstate_latest_path
+        self.tfstate             = None
+        self.tfstate_latest      = None  
+        self.difference_type     = None
+        self.original_inventory  = None
+        self.latest_inventory    = None
+        self.latest_dc_count     = None   
+        self.original_dc_count   = None
+        self.original_node_count = None
+        self.latest_node_count   = None         
     
     def init_inventory(self):
         return {
             "all": {
                 "hosts": [],
-                "children": ["dse", "dse_core","dse_search","dse_analytics","dse_graph","opsc_dsecore","opsc_srv"]       
+                "children": ["dse", "dse_core","dse_search","dse_analytics","dse_graph","opsc_dsecore","opsc_srv","add_node","add_datacenter"],
+                "vars": {}
             },
             "dse": {
+                "hosts": [],
                 "children": ["dse_core","dse_search","dse_analytics","dse_graph"],
                 "vars": {
                     "cluster_name": "DseCluster"
@@ -37,6 +39,7 @@ class TerraformDynamicInventory():
             },
             "dse_core": {
                 "hosts": [],
+                "children": [],
                 "vars": {
                     "solr_enabled": 0,
                     "spark_enabled": 0,
@@ -46,65 +49,67 @@ class TerraformDynamicInventory():
             },
             "dse_search": {
                 "hosts": [],
+                "children": [],
                 "vars": {
                     "solr_enabled": 1,
                     "spark_enabled": 0,
                     "graph_enabled": 0,
                     "auto_bootstrap": 1
-                }
+                },
             },        
             "dse_analytics": {
                 "hosts": [],
+                "children": [],
                 "vars": {
                     "solr_enabled": 0,
                     "spark_enabled": 1,
                     "graph_enabled": 0,
                     "auto_bootstrap": 1
-                }
+                },
             },        
             "dse_graph": {
                 "hosts": [],
+                "children": [],
                 "vars": {
                     "solr_enabled": 0,
                     "spark_enabled": 0,
                     "graph_enabled": 1,
                     "auto_bootstrap": 1
-                }
+                },
             },
             "opsc_dsecore": {
                 "hosts": [],
+                "children": [],
                 "vars": {
                     "cluster_name": "OpscCluster",
                     "solr_enabled": 0,
                     "spark_enabled": 0,
                     "graph_enabled": 0,
                     "auto_bootstrap": 1                
-                }
+                },
             },        
             "opsc_srv": {
                 "hosts": [],
-                "vars": {}
+                "vars": {},
+                "children": []
             },
             "_meta": {
                 "hostvars": {}
             },
             "add_node": self.init_group(), 
-            "add_datacenter": {
-                "hosts": [],
-                "vars": {
+            "add_datacenter": self.init_group()       
+        }
+
+    def init_group(self, children=None, hosts=None):
+        return {
+            "hosts": [] if hosts is None else hosts,
+            "children": [] if children is None else children,
+            "vars": {
                     "solr_enabled": 0,
                     "spark_enabled": 0,
                     "graph_enabled": 0,
                     "auto_bootstrap": 0                
-                }
-            },       
-        }
-
-    def init_group(self, children=None, hosts=None, vars=None):
-        return {
-            "hosts": [] if hosts is None else hosts,
-            "vars": {} if vars is None else vars,
-            "children": [] if children is None else children
+            }
         }
 
     def add_node_to_inventory(self, dse_datacenter_name, dse_node_type, node, inventory):   
@@ -123,6 +128,18 @@ class TerraformDynamicInventory():
             #create a newly initialised group and add the node to the group 
             inventory[dse_datacenter_name] = self.init_group(hosts=[node['private_ip']])
             
+            #set the datacenter's group vars node type
+            dse_node_type = node['tags.DSENodeType']
+            if dse_node_type == 'dse_graph':
+                inventory[dse_datacenter_name]['vars']['graph_enabled'] = 1
+            elif dse_node_type == 'dse_analytics':
+                inventory[dse_datacenter_name]['vars']['spark_enabled'] = 1
+            elif dse_node_type == 'dse_solr':
+                inventory[dse_datacenter_name]['vars']['solr_enabled'] = 1
+        
+            #set the datacenter to auto bootstrap=false
+            inventory[dse_datacenter_name]['vars']['auto_bootstrap'] = 1
+
             #add the dc name to dse:children if not OPSC
             if dse_datacenter_name not in inventory['dse']['children'] and dse_datacenter_name != 'opsc_dsecore':
                 inventory['dse']['children'].append(dse_datacenter_name)
@@ -215,7 +232,7 @@ class TerraformDynamicInventory():
             #identify the node they are adding
             add_node_ip = self.getAddNodeIp()
             
-            #populate 'all' with the new node
+            #populate 'all' with the new node ip
             self.original_inventory['all']['hosts'].append(add_node_ip)
             
             #populate the [add_node] group with the new node
@@ -227,9 +244,17 @@ class TerraformDynamicInventory():
             #make sure added node is not a seed
             self.original_inventory["_meta"]["hostvars"][add_node_ip]['seed'] = False
             
-            #no need to set node type, this should be discovered in ansible by the datacenters type.
+            #set the datacenter's group vars node type
+            dse_node_type = self.latest_inventory["_meta"]["hostvars"][add_node_ip]['tags.DSENodeType']
+            if dse_node_type == 'dse_graph':
+                self.original_inventory['add_node']["vars"]['graph_enabled'] = 1
+            elif dse_node_type == 'dse_analytics':
+                self.original_inventory['add_node']["vars"]['spark_enabled'] = 1
+            elif dse_node_type == 'dse_solr':
+                self.original_inventory['add_node']['vars']['solr_enabled'] = 1            
             
-            #TODO: need to auto_bootstrap this node
+            #need to auto_bootstrap this node
+            self.original_inventory['add_node']['vars']['auto_bootstrap'] = 1
                 
         if self.difference_type == 'add_datacenter':
             #check the user is only trying to add one node
