@@ -1,6 +1,8 @@
 
 # Generate dynamic Ansible inventory off Terraform .tfstate files for TerraDSE
 
+This dynamic inventoiry is intended to be used by the []TerraDSE project](https://github.com/thompson42/terradse)
+
 This small module will generate a dynamic inventory (hosts file) for TerraDSE by differencing two tfstate files.
 
 The difference is controlled by two tags on each instance:
