@@ -24,7 +24,7 @@ If you attempt to add more than 1x node the script will exit and fail.
 
 If you attempt to add more than 1x datacenter the script will exit and fail.
 
-###Set two EC2 tags on AWS all DSE cluster instances:
+### Set two EC2 tags on AWS all DSE cluster instances:
 
 ````
 "tags.DSEDataCenterName": "dse_graph",
@@ -32,13 +32,13 @@ If you attempt to add more than 1x datacenter the script will exit and fail.
 
 ````
 
-###When calling an ansible playbook, point to the inventory_generator.py file:
+### When calling an ansible playbook, point to the inventory_generator.py file:
 
 ````
 cmd>ansible-playbook -i /path/to/inventory_generator.py dse_keyspace_replication_configure.yml --private-key=~/.ssh/id_rsa_aws
 ````
 
-###Initial cluster build example, single Terraform tfstate:
+### Initial cluster build example, single Terraform tfstate:
 
 ````
 instance 1{
@@ -76,7 +76,7 @@ instance 5{
 
 From this single Terraform tfstate the dynamic inventory is the initial spin up of a TerraDSE cluster due to the fact there is no prior state file (i.e. not 2x tfstate files supplied to the script)
 
-###Add a node example [add_node], two Terraform tfstate files:
+### Add a node example [add_node], two Terraform tfstate files:
 
 Original tfstate:
 
@@ -158,7 +158,7 @@ instance 6{
 
 Note that "instance 6" is the difference between the two Terraform tfstate files, it is an additional node going into an existing datacenter called dse_core
 
-###Add a datacenter example [add_datacenter], two Terraform tfstate files:
+### Add a datacenter example [add_datacenter], two Terraform tfstate files:
 
 Original tfstate:
 
