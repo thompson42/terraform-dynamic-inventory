@@ -1,0 +1,8 @@
+terraform_extended/.terraform
+*.retry
+*.wpr
+*.wpu
+ansible/group_vars/all/
+ansible/group_vars/all/*
+ansible/group_vars/all_backup
+
