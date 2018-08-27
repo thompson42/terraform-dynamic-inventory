@@ -11,5 +11,6 @@ proj.directory-list = [{'dirloc': loc('test_data'),
                         'recursive': True,
                         'watch_for_changes': True}]
 proj.file-list = [loc('inventory_generator.py'),
+                  loc('README.md'),
                   loc('sample.py')]
 proj.file-type = 'shared'
