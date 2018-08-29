@@ -246,7 +246,7 @@ class TerraformDynamicInventory():
             self.original_inventory["_meta"]["hostvars"][add_node_ip] = self.latest_inventory["_meta"]["hostvars"][add_node_ip]
                     
             #make sure added node is not a seed
-            self.original_inventory["_meta"]["hostvars"][add_node_ip]['seed'] = False
+            self.original_inventory["_meta"]["hostvars"][add_node_ip]['seed'] = 'false'
             
             #set the datacenter's group vars node type
             dse_node_type = self.latest_inventory["_meta"]["hostvars"][add_node_ip]['tags.DSENodeType']
