@@ -168,7 +168,11 @@ class TerraformDynamicInventory():
         inventory["_meta"]["hostvars"][node['private_ip']]['rack'] = 'RAC1'
         inventory["_meta"]["hostvars"][node['private_ip']]['vnode'] = '1'
         inventory["_meta"]["hostvars"][node['private_ip']]['initial_token'] = '0'
-        inventory["_meta"]["hostvars"][node['private_ip']]['seed'] = is_seed_node
+        
+        if is_seed_node:
+            inventory["_meta"]["hostvars"][node['private_ip']]['seed'] = 'true'
+        else:
+            inventory["_meta"]["hostvars"][node['private_ip']]['seed'] = 'false'
         
         #clear out any verbose or sensitive fields
         inventory["_meta"]["hostvars"][node['private_ip']]['user_data_base64'] = "cleared"
@@ -361,6 +365,6 @@ class TerraformDynamicInventory():
 if __name__ == '__main__':
     
     tfstate_path = 'test_data/tf_state.json'
-    tfstate_latest_path = 'test_data/tf_state_add_datacenter.json'  
+    tfstate_latest_path = ''  
     tdi = TerraformDynamicInventory(tfstate_path, tfstate_latest_path)
     tdi.main()
