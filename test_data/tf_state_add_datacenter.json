@@ -142,8 +142,7 @@
                             "tags.Role": "DSE",
                             "tags.DSEDataCenterName": "my_datacenter_name_2",
                             "tags.DSENodeType": "dse_graph",
-                            "tenancy": "default",
-                            "volume_tags.%": "0",
+                            "tenancy": "default"
                         },
                         "meta": {
                             "e2bfb730-ecaa-11e6-8f88-34363bc7c4c0": {
@@ -210,8 +209,7 @@
                             "tags.Role": "DSE",
                             "tags.DSEDataCenterName": "my_datacenter_name_2",
                             "tags.DSENodeType": "dse_graph",
-                            "tenancy": "default",
-                            "volume_tags.%": "0",
+                            "tenancy": "default"
                         },
                         "meta": {
                             "e2bfb730-ecaa-11e6-8f88-34363bc7c4c0": {
@@ -278,8 +276,7 @@
                             "tags.Role": "DSE",
                             "tags.DSEDataCenterName": "my_datacenter_name_2",
                             "tags.DSENodeType": "dse_graph",
-                            "tenancy": "default",
-                            "volume_tags.%": "0",
+                            "tenancy": "default"
                         },
                         "meta": {
                             "e2bfb730-ecaa-11e6-8f88-34363bc7c4c0": {
@@ -346,8 +343,7 @@
                             "tags.Role": "DSE",
                             "tags.DSEDataCenterName": "my_datacenter_name",
                             "tags.DSENodeType": "dse_graph",
-                            "tenancy": "default",
-                            "volume_tags.%": "0",
+                            "tenancy": "default"
                         },
                         "meta": {
                             "e2bfb730-ecaa-11e6-8f88-34363bc7c4c0": {
@@ -415,7 +411,7 @@
                             "tags.Role": "DSE",
                             "tags.DSEDataCenterName": "my_datacenter_name",
                             "tags.DSENodeType": "dse_graph",
-                            "tenancy": "default",
+                            "tenancy": "default"
                         },
                         "meta": {
                             "e2bfb730-ecaa-11e6-8f88-34363bc7c4c0": {
@@ -483,7 +479,7 @@
                             "tags.Role": "DSE",
                             "tags.DSEDataCenterName": "my_datacenter_name",
                             "tags.DSENodeType": "dse_graph",
-                            "tenancy": "default",
+                            "tenancy": "default"
                         },
                         "meta": {
                             "e2bfb730-ecaa-11e6-8f88-34363bc7c4c0": {
@@ -551,7 +547,7 @@
                             "tags.Role": "OpsCenter",
                             "tags.DSEDataCenterName": "opsc_dsecore",
                             "tags.DSENodeType": "dse_core",
-                            "tenancy": "default",
+                            "tenancy": "default"
                         },
                         "meta": {
                             "e2bfb730-ecaa-11e6-8f88-34363bc7c4c0": {
@@ -619,7 +615,7 @@
                             "tags.Role": "OpsCenter",
                             "tags.DSEDataCenterName": "opsc_dsecore",
                             "tags.DSENodeType": "dse_core",
-                            "tenancy": "default",
+                            "tenancy": "default"
                         },
                         "meta": {
                             "e2bfb730-ecaa-11e6-8f88-34363bc7c4c0": {

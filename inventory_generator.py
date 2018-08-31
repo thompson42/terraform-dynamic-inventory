@@ -356,8 +356,8 @@ class TerraformDynamicInventory():
                 
             sys.stdout.write(json.dumps(inventory, indent=2))
             
-        except:
-            sys.stdout.write("An exception occured generating the dynamic inventory, plese check your TFSTATE file/s.")
+        except Exception as ex:
+            sys.stdout.write("An exception occured generating the dynamic inventory, plese check your TFSTATE file/s: " + str(ex))
             sys.exit(1)
             
         return json.dumps(inventory, indent=2)
@@ -365,6 +365,6 @@ class TerraformDynamicInventory():
 if __name__ == '__main__':
     
     tfstate_path = 'test_data/tf_state.json'
-    tfstate_latest_path = ''  
+    tfstate_latest_path = ''
     tdi = TerraformDynamicInventory(tfstate_path, tfstate_latest_path)
     tdi.main()
