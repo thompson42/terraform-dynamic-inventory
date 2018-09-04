@@ -5,10 +5,11 @@ This dynamic inventory is intended to be used by the [TerraDSE project](https://
 
 This small module will generate a dynamic inventory (hosts) for TerraDSE from tfstate files.
 
-The inventory is controlled by two tags on each instance:
+The inventory is controlled by two AWS tags on each instance:
 
 ````
-tags.DSEDataCenterName and tags.DSENodeType
+tags.DSEDataCenterName
+tags.DSENodeType
 
 ````
 
@@ -41,10 +42,22 @@ If you attempt to add more than 1x datacenter the script will exit and fail.
 
 ````
 
-### When calling an ansible playbook, point to the inventory_generator.py file:
+### When calling an ansible playbook, explicitly point to the inventory_generator.py file:
 
 ````
 cmd>ansible-playbook -i /path/to/inventory_generator.py dse_keyspace_replication_configure.yml --private-key=~/.ssh/id_rsa_aws
+````
+
+Or, in your ansible.cfg file enter the line:
+
+````
+inventory = /path/to/inventory_generator.py
+````
+
+And then call a playbook via:
+
+````
+cmd>ansible-playbook dse_keyspace_replication_configure.yml --private-key=~/.ssh/id_rsa_aws
 ````
 
 ### Initial cluster build example, single Terraform tfstate:
