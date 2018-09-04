@@ -3,9 +3,9 @@
 
 This dynamic inventory is intended to be used by the [TerraDSE project](https://github.com/thompson42/terradse)
 
-This small module will generate a dynamic inventory (hosts file) for TerraDSE by differencing two tfstate files.
+This small module will generate a dynamic inventory (hosts) for TerraDSE from tfstate files.
 
-The difference is controlled by two tags on each instance:
+The inventory is controlled by two tags on each instance:
 
 ````
 tags.DSEDataCenterName and tags.DSENodeType
@@ -21,7 +21,7 @@ tfstate_latest_path = 'test_data/tf_state_latest.json'
 
 With these two tags correctly set on existing Terraform tfstate and a new Terraform tfstate we have enough information to generate a dynamic inventory for ansible, avoiding the need to maintain [hosts] files for ansible, we also have the added advantage of being able to version tfstate files in S3 etc.
 
-Case 1: If only a single Terraform tfstate file exists the dynamic inventory script will build the Ansible inventory for a new TerraDSE cluster (the initial cluster)
+Case 1: If only a single Terraform tfstate file exists in the first field;tfstate_path and the second field; tfstate_latest_path is empty,  the dynamic inventory script will build the Ansible inventory describing the current state, this can be used to generate a new cluster, or used to perform work on the existing cluster.
 
 Case 2: If two Terraform tfstate files exist the dynamic inventory script will difference the two states and work out your intentions:
 
